@@ -9,21 +9,50 @@ int ft_putstrd(char *str, t_list *lst)
     len = 0;
     i = 0;
     i2 = 0;
-    if (lst->ispres && lst->precision < 0)
+    if (lst->ispres && lst->precision < 0) 
         lst->precision = 0;
     if (lst->align == 'l' && lst->filler == '0')
         lst->filler = ' ';
-// FIXIT THE WIDTH OR PREC == -1
-    if (lst->sign == 0)
-    {
-        
+
+    if (lst->sign == 0) // NOT D, I, U, X
+    { // FLAG 0: flag '0' results in undefined behavior with 's' conversion specifier [-Wformat]
         if (lst->precision >= 0 && lst->precision < ft_strlen(str))
-            len = lst->precision;
+            len = lst->precision; //CHECK WITH NULL
         else if (lst->precision == -1 || lst->precision >= ft_strlen(str))
             len = ft_strlen(str);
         if (lst->width == -1)
             lst->width = len;
     }
+    else 
+    {//flag '0' is ignored when flag '-' is present [-Wformat]
+        if (lst->align == 'r' && lst->filler == '0')
+            lst->filler == ' ';
+        if (lst->precision != -1)
+        {
+            if (lst->precision <= ft_strlen)
+                len = ft_strlen(str) + (lst->sign == -1);
+            else
+                len = lst->precision + (lst->sign == -1);
+            
+        }
+        if (lst->width <= len)
+        {
+            if (lst->sign == -1)
+            {
+                write(1, '-', 1);
+                i++;
+                while (--len != ft_strlen(str))
+                    write(1, '0', 1);
+                while (*str++)
+                {
+                    char temp = *str;
+                    write(1, &temp, 1);
+                }
+            }
+        }
+
+    }
+    
     if (lst->width <= len)
     {
         while (i < len)
