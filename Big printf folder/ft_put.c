@@ -36,23 +36,28 @@ int ft_putstrd(char *str, t_list *lst)
         
         if (lst->precision != -1)
         {
+            
             if (lst->precision <= ft_strlen(str))//check for neg
                 len = ft_strlen(str) + (lst->sign == -1);
             else
                 len = lst->precision + (lst->sign == -1);    
+            //
         }
+        printf("\n %d %d\n", lst->width, len);
         if (lst->width <= len)
         {
             if (lst->sign == -1)
             {
                 ft_putchar('-');
                 i++;
-                while (--len != ft_strlen(str))
+                len--;
+                while (len-- != ft_strlen(str))
                     {ft_putchar('0');
                     i++;}
-                while (*str++)
+                while (*str)
                     {ft_putchar(*str);
-                    i++;}
+                    i++;
+                    str++;}
             }
         }
         return (i);
