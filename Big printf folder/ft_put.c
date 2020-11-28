@@ -1,5 +1,10 @@
 #include "myprintf.h"
 
+void ft_putchar(int l)
+{
+    write(1, &l, 1);
+}
+
 int ft_putstrd(char *str, t_list *lst)
 {
     int i;
@@ -26,30 +31,31 @@ int ft_putstrd(char *str, t_list *lst)
     else 
     {//flag '0' is ignored when flag '-' is present [-Wformat]
         if (lst->align == 'r' && lst->filler == '0')
-            lst->filler == ' ';
+            lst->filler = ' ';
+        
+        
         if (lst->precision != -1)
         {
-            if (lst->precision <= ft_strlen)
+            if (lst->precision <= ft_strlen(str))//check for neg
                 len = ft_strlen(str) + (lst->sign == -1);
             else
-                len = lst->precision + (lst->sign == -1);
-            
+                len = lst->precision + (lst->sign == -1);    
         }
         if (lst->width <= len)
         {
             if (lst->sign == -1)
             {
-                write(1, '-', 1);
+                ft_putchar('-');
                 i++;
                 while (--len != ft_strlen(str))
-                    write(1, '0', 1);
+                    {ft_putchar('0');
+                    i++;}
                 while (*str++)
-                {
-                    char temp = *str;
-                    write(1, &temp, 1);
-                }
+                    {ft_putchar(*str);
+                    i++;}
             }
         }
+        return (i);
 
     }
     
@@ -96,6 +102,7 @@ int ft_putchard(int l, t_list *lst)
     write(1, &l, 1);
     return (1);
 }
+
 
 
 //printf("\n align %c filler %c .ispres %d precision %d sign %d width %d len %d\n", lst->align, lst->filler, lst->ispres, lst->precision, lst->sign, lst->width, len);
